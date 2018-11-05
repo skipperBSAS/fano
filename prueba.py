@@ -57,18 +57,24 @@ for i in range(1):
         #     # i+=1
         #     # print index, i
 
-    n,bins,patches = plt.hist(pixValue,bins=2000,range=(16000,18000))
+    range1=15000
+    range2=22000
+    bin=(range2-range1)/10
+    n,bins,patches = plt.hist(pixValue,bins=bin,range=(range1,range2))
     # plt.figure(1)
-    #:plt.axis([-300,10000,0,1000])
-
-    indexes = peakutils.indexes(smooth(n,20), thres=0.02/max(smooth(n,20)), min_dist=200)
-
+    #:plt.axis([-300,10000,0,1000
+    indexes = peakutils.indexes(smooth(n,5), thres=0.02/max(smooth(n,5)), min_dist= 200*bin/(range2-range1))
+    peaks= peakutils.interpolate(np.linspace(range1,range2,bin), smooth(n,5), ind=indexes, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
     print indexes
+    print peaks
+    peaks = [int(i) for i in peaks]
+    print peaks
          # plt.show()
     plt.figure(2)
 
-    plt.plot(n)
-    plt.plot(smooth(n,10))
-    plt.plot(indexes,n[indexes],'bo')
+    #plt.plot(n)
+    plt.plot(np.linspace(range1,range2,bin),smooth(n,5))
+    # print n[indexes]
+    plt.plot(peaks,n[indexes],'bo')
     plt.show()
     i+=1
