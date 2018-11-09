@@ -10,7 +10,7 @@ import time
 inroot = sys.argv[1]
 
 # ===================================================
-# Función para "suavizar"  
+# Funcion para "suavizar"  
 # ===================================================
 def smooth(y, box_pts):
     box = np.ones(box_pts)/box_pts
@@ -31,7 +31,7 @@ skPixTree = f.Get('skPixTree')
 # Importamos los datos  
 # ===================================================
 
-rows=400*50 # 50 Lineas 
+rows=50 # 50 Lineas 
 
 for i in range(1):
     
@@ -45,9 +45,9 @@ for i in range(1):
     #print 1
     for index, event in enumerate(skPixTree):
         #
-        if index==rows: # Acotamos el numero de lineas para medir
-            #print i, index
-            break 
+        if event.y==rows: break  # Acotamos el numero de lineas para medir
+        if event.x>370 and event.x<7: continue # Quitamos el Overscan
+            
 
         pixValue = np.append(pixValue,event.pix) # Importamos as este array los valores del Branch "pix"
         #
@@ -72,6 +72,15 @@ for i in range(1):
 
     plt.figure(1)
     
+    range1 = np.mean(pixValue)  #min(pixValue)
+    range2 = #max(pixValue)
+    bin=int((range2-range1)/50)
+    
+    n1,bins1,patches1 = plt.hist(pixValue,bins=bin,range=(range1,range2))
+    plt.show()
+
+    exit()
+
     range1=250000
     range2=550000
     bin=(range2-range1)/100
