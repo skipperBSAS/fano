@@ -9,37 +9,47 @@ import sys
 import time
 inroot = sys.argv[1]
 
+# ===================================================
+# Función para "suavizar"  
+# ===================================================
 def smooth(y, box_pts):
     box = np.ones(box_pts)/box_pts
     y_smooth = np.convolve(y, box, mode='same')
     return y_smooth
 
-
+# ===================================================
+# Importamos los datos  
+# ===================================================
 
 f = TFile(inroot)
 skPixTree = f.Get('skPixTree')
 
-skPixTree.SetBranchStatus("pix",0)
-skPixTree.SetBranchStatus('pix',1)
-rows=400*50
+#skPixTree.SetBranchStatus("pix",0)
+#skPixTree.SetBranchStatus('pix',1)
+
+# ===================================================
+# Importamos los datos  
+# ===================================================
+
+rows=400*50 # 50 Lineas 
+
 for i in range(1):
+    
+
+    # ===================================================
+    # Pasamos datos del Tree a un array  
+    # ===================================================
+
+
     pixValue = []
     #print 1
     for index, event in enumerate(skPixTree):
         #
-        if index==rows:
-        #print i, index
-                break
-        #
-        #     # time.sleep(2)
-        #
-        #  # if  (40000*i > index and index >= 1000 + 40000*(i-1)):
-        #     # print index
-        #     # time.sleep(5)
-        #
-        #     # continue
-        #  # print index
-        pixValue = np.append(pixValue,event.pix)
+        if index==rows: # Acotamos el numero de lineas para medir
+            #print i, index
+            break 
+
+        pixValue = np.append(pixValue,event.pix) # Importamos as este array los valores del Branch "pix"
         #
         # # print i
         #  # print f.skPixTree[i]
@@ -52,6 +62,16 @@ for i in range(1):
         #     # i+=1
         #     # print index, i
 
+
+
+
+
+    # ===================================================
+    # Buscamos la media en la poissoneana del LED  
+    # ===================================================
+
+    plt.figure(1)
+    
     range1=250000
     range2=550000
     bin=(range2-range1)/100
@@ -63,7 +83,14 @@ for i in range(1):
     #peaks = [int(i) for i in peaks]
     #print peaks
          # plt.show()
+
+
+    # ===================================================
+    # Buscamos la media y sigma de cada pico de carga 
+    # ===================================================
+
     plt.figure(2)
+
     peak1 = [int(i) for i in peak1]
     range1=peak1[0]-int(np.sqrt(peak1[0]))*4
     range2=peak1[0]+int(np.sqrt(peak1[0]))*4
@@ -82,4 +109,5 @@ for i in range(1):
     x = np.linspace(1,len(peaks),len(peaks))
     slope = np.polyfit(x,peaks,1)
     print slope
-    i+=1
+    
+    #i+=1
