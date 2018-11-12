@@ -28,7 +28,7 @@ skPixTree = f.Get('skPixTree')
 #skPixTree.SetBranchStatus('pix',1)
 
 # ===================================================
-# Importamos los datos  
+# Importamos los datos a un array 
 # ===================================================
 
 rows=50 # 50 Lineas 
@@ -40,31 +40,16 @@ for i in range(1):
     # Pasamos datos del Tree a un array  
     # ===================================================
 
-
     pixValue = []
-    #print 1
+    
     for index, event in enumerate(skPixTree):
         #
-        if event.y==rows: break  # Acotamos el numero de lineas para medir
+        if event.y==rows-1: break  # Acotamos el numero de lineas para medir
         if event.x>370 and event.x<7: continue # Quitamos el Overscan
             
 
         pixValue = np.append(pixValue,event.pix) # Importamos as este array los valores del Branch "pix"
-        #
-        # # print i
-        #  # print f.skPixTree[i]
-        #  # print event.pix, index
-        #  # index = 1
-        #  # print i, (i%40000)
-
-        #
-        #     # index = 40000*(i+1)
-        #     # i+=1
-        #     # print index, i
-
-
-
-
+        
 
     # ===================================================
     # Buscamos la media en la poissoneana del LED  
@@ -72,27 +57,29 @@ for i in range(1):
 
     plt.figure(1)
     
-    range1 = np.mean(pixValue)  #min(pixValue)
-    range2 = #max(pixValue)
-    bin=int((range2-range1)/50)
+    meanP = np.mean(pixValue)
+    range1 = meanP - 2*np.sqrt(meanP*200)   #min(pixValue)
+    range2 = meanP + 2*np.sqrt(meanP*200)   #max(pixValue)
     
-    n1,bins1,patches1 = plt.hist(pixValue,bins=bin,range=(range1,range2))
+    #bin=int((range2-range1)/20)
+    #n1,bins1,patches1 = plt.hist(pixValue,bins=bin,range=(range1,range2))
+    #plt.show()
+
+    bin=int((range2-range1)/50)
+    #n1= plt.hist(pixValue,bins=bin,range=(range1,range2))[0]
+    n1= plt.hist(pixValue,bins=bin,range=(range1,range1 + 10000))[0]
     plt.show()
-
-    exit()
-
-    range1=250000
-    range2=550000
-    bin=(range2-range1)/100
-    n1,bins1,patches1 = plt.hist(pixValue,bins=bin,range=(range1,range2))
-    index1 = peakutils.indexes(smooth(n1,5), thres=0.02/max(smooth(n1,5)), min_dist= bin)
-    peak1= peakutils.interpolate(np.linspace(range1,range2,bin), smooth(n1,5), ind=index1, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
-    #print indexes
+    print n1
+    indexes = peakutils.indexes(smooth(n1,5), thres=0.02/max(smooth(n1,5)), min_dist= 150)
+    
+    #peak1= peakutils.interpolate(np.linspace(range1,range2,bin), smooth(n1,5), ind=index1, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
+    
+    print indexes
     #print peaks
     #peaks = [int(i) for i in peaks]
     #print peaks
          # plt.show()
-
+    exit()
 
     # ===================================================
     # Buscamos la media y sigma de cada pico de carga 
