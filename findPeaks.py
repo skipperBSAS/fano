@@ -72,7 +72,7 @@ for i in range(1):
 
     plt.figure(1)
 
-    range1=250000
+    range1=100000
     range2=550000
     bin=(range2-range1)/100
     n1,bins1,patches1 = plt.hist(pixValue,bins=bin,range=(range1,range2))
@@ -91,15 +91,15 @@ for i in range(1):
 
     plt.figure(2)
 
-    peak1 = [int(i) for i in peak1]
+    peak1 = [double(i) for i in peak1]
     range1=peak1[0]-int(np.sqrt(peak1[0]))*10
     range2=peak1[0]+int(np.sqrt(peak1[0]))*10
-    bin=(range2-range1)/30 # enlarging the dividend, gives us thicker bins
+    bin=int((range2-range1)/30) # enlarging the dividend, gives us thicker bins
     n,bins,patches = plt.hist(pixValue,bins=bin,range=(range1,range2))
-    indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 170*bin/(range2-range1))
+    indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 150*bin/(range2-range1))
     peaks= peakutils.interpolate(np.linspace(range1,range2,bin), n, ind=indexes, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
     print indexes
-    peaks = [int(i) for i in peaks]
+    peaks = [double(i) for i in peaks]
     dist_peaks=[peaks[i]-peaks[i-1] for i in range(1,len(peaks))]
     print peaks
     print dist_peaks
@@ -121,5 +121,4 @@ for i in range(1):
     plt.figure(4)
     plt.hist(dist_peaks)
     print slope
-
-    #i+=1
+    print len(peaks)
