@@ -1,0 +1,19 @@
+Idea para un codigo nuevo
+
+Buscamos el máximo de los maximos.
+Sobre ese máximo, realizamos el primer ajuste gaussiano, obtenemos valores preliminares de ancho y centro, necesarios para las demás gaussianas.
+En una etapa de prueba, aumentaría el numero de gaussianas a ajustar de manera escalonada:
+primero 5
+despues 9
+despues 19
+despues 39
+siempre con la primer gaussiana en el medio
+
+ancho: fijo para todos los picos, no veo necesidad de ajustar este parametro mas de 1 vez.
+centro: 
+distancia: 
+
+
+
+
+
