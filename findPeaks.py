@@ -94,31 +94,55 @@ for i in range(1):
     peak1 = [double(i) for i in peak1]
     range1=peak1[0]-int(np.sqrt(peak1[0]))*10
     range2=peak1[0]+int(np.sqrt(peak1[0]))*10
-    bin=int((range2-range1)/30) # enlarging the dividend, gives us thicker bins
-    n,bins,patches = plt.hist(pixValue,bins=bin,range=(range1,range2))
-    indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 150*bin/(range2-range1))
-    peaks= peakutils.interpolate(np.linspace(range1,range2,bin), n, ind=indexes, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
-    print indexes
-    peaks = [double(i) for i in peaks]
-    dist_peaks=[peaks[i]-peaks[i-1] for i in range(1,len(peaks))]
-    print peaks
-    print dist_peaks
-    print np.mean(dist_peaks)
+    BIN=int((range2-range1)/30) # enlarging the dividend, gives us thicker bins
+    N=30
+    bin_vector=np.linspace(BIN-N/2,BIN+N/2, num=N)
+    m=0
+    chi =[0]*N
+    dist_peaks =[0]*N
 
+    #chi=np.linspace(BIN-N/2,BIN+N/2, num=N)
+    for h in bin_vector:
+        #j=j+1
+        print m
+        n,bins,patches = plt.hist(pixValue,bins=bin,range=(range1,range2))
+        indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 150*bin/(range2-range1))
+        peaks= peakutils.interpolate(np.linspace(range1,range2,bin), n, ind=indexes, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
+        #print indexes
+        peaks = [double(i) for i in peaks]
+        M= np.linspace(1,len(peaks)-1,len(peaks)-1)
+        
+        print len(peaks)
+        dist_peaks=[0 for i in M]
+        print len(dist_peaks)
+        dist_peaks=[peaks[i]-peaks[i-1] for i in M]
+        print len(dist_peaks)
+        #print np.mean(dist_peaks)
+        x = np.linspace(1,len(peaks),len(peaks))
+        range= np.linspace(range1,range2,len(peaks))
+        slope = np.polyfit(x,peaks,1)
+        x1=np.linspace(range1,range2)
+        y1=slope[0]*x+slope[1]
+        media=np.mean(dist_peaks)
+        chi[m]=slope[0]-media
+        #chi[i]=1
+        m=m+1
+        if m!=0:
+            if chi[m]<chi[m-1]:
+                factor=slope[0]
+                factor2=np.mean(dist_peaks)
+        else:
+            factor=slope[0]
+            factor2=np.mean(dist_peaks)
+
+    print factor
     plt.plot(np.linspace(range1,range2,bin),smooth(n,5))
     # print n[indexes]
     plt.plot(peaks,n[indexes],'bo')
     #plt.show()
-    x = np.linspace(1,len(peaks),len(peaks))
-    range= np.linspace(range1,range2,len(peaks))
-    slope = np.polyfit(x,peaks,1)
-    x1=np.linspace(range1,range2)
-    y1=slope[0]*x+slope[1]
     plt.figure(3)
     plt.plot(x,peaks,'.')
     plt.plot(x,y1)
 
     plt.figure(4)
     plt.hist(dist_peaks)
-    print slope
-    print len(peaks)
