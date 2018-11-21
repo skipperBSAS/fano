@@ -96,10 +96,11 @@ for i in range(1):
     range1=peak1[0]-int(np.sqrt(peak1[0]))*10
     range2=peak1[0]+int(np.sqrt(peak1[0]))*10
     BIN=int((range2-range1)/32) # enlarging the dividend, gives us thicker bins
-    N=101
+    N=151
     bin_vector=np.linspace(BIN-N/2,BIN+N/2, num=N)
     bin_vector = [int(i) for i in bin_vector]
     m=0
+    j=0
     delta =[0]*N
     dist_peaks =((),)
     caca = True
@@ -124,12 +125,15 @@ for i in range(1):
         #print len(dist_peaks)
         #print np.mean(dist_peaks)
 	#largo = len(peaks)
-	for n in [0,len(peaks)-1]:
-        	if peaks[n]<100:
-	            caca = False
-	if caca == False:
+
+
+	minimo=min(peaks)
+	if minimo<100:
 		m=m+1
 		continue
+
+	print m
+	
         x = np.linspace(1,len(peaks),len(peaks))
         range= np.linspace(range1,range2,len(peaks))
         slope = np.polyfit(x,peaks,1)
@@ -139,10 +143,11 @@ for i in range(1):
         delta[m]=abs(slope[0]-media)
         #print "slope = "+str(slope[0])
         #print "media = "+str(media)
-        if m==0:
+        if j==0:
 	    factor=slope[0]
             factor2=np.mean(dist_peaks)
 	    delta2=delta[m]
+	    M=m
 
  
         else:
@@ -153,6 +158,7 @@ for i in range(1):
 	    	M=m
 	    	
 	m=m+1
+	j=j+1
     print str(factor)+" delta = "+str(delta2)+" m = "+str(M)
 #    plt.plot(np.linspace(range1,range2,bin_vector[M]),smooth(n,5))
     # print n[indexes]
