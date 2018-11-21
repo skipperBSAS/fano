@@ -101,7 +101,9 @@ for i in range(1):
     bin_vector = [int(i) for i in bin_vector]
     m=0
     j=0
+    pendiente = [0]*N
     delta =[0]*N
+    promedio =[0]*N
     dist_peaks =((),)
     caca = True
 
@@ -140,6 +142,8 @@ for i in range(1):
         x1=np.linspace(range1,range2)
         y1=slope[0]*x+slope[1]
         media=np.mean(dist_peaks)
+        promedio[m]=media
+        pendiente[m]=slope[0]
         delta[m]=abs(slope[0]-media)
         #print "slope = "+str(slope[0])
         #print "media = "+str(media)
@@ -158,8 +162,16 @@ for i in range(1):
 	    	M=m
 	    	
 	m=m+1
+	plt.close()
 	j=j+1
     print str(factor)+" delta = "+str(delta2)+" m = "+str(M)
+    plt.close()
+    fig1=plt.figure()
+    plt.hist(pendiente,bins=200)
+    fig1.show()
+    fig2=plt.figure()
+    plt.hist(promedio,bins=200,color='red')
+    fig2.show()
 #    plt.plot(np.linspace(range1,range2,bin_vector[M]),smooth(n,5))
     # print n[indexes]
     #plt.plot(peaks,n[indexes],'bo')
