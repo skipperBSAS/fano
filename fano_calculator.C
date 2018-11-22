@@ -34,7 +34,7 @@ void Enable_and_Set_Branches(TTree* & tree);
 // Setting parameters //////////////////////////////////////////////////
 
   // range for the number of electrons per cluster
-  int emin =1530 ; int emax = 1610 ; //1530 1610
+  int emin =1540 ; int emax = 1620 ; //1530 1610
   int ohdu_numer = 4;
   //number of bins to take into account for chi2
   int bines = 20;
@@ -93,11 +93,11 @@ cout<<"min ePix: "<< minePix<<endl;
 
 
 					//myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55_ST136/fano.txt");
-					myfile.open ("/home/mariano/mkids/07Nov2018/LED55Fe_ST152K_01_a2-5/afterskipper2root/clustered/fano.txt");
+					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/Con_LED/142K/fano.txt");
 
 
             //TFile * f_exp = TFile::Open("./55Fe_exp.root");
-            TFile * f_exp = TFile::Open("/home/mariano/mkids/07Nov2018/LED55Fe_ST152K_01_a2-5/afterskipper2root/clustered/output_2_07Nov2018_LED55Fe_ST152K_01_a2-5.root");
+            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/analisis/Con_LED/142K/output_2.root");
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
@@ -198,7 +198,10 @@ cout<<"min ePix: "<< minePix<<endl;
 
             myfile  << "Para todos los n" << endl;
             myfile  << mean_exp_fit[0]  << "	" << sigma_exp_fit[0] << "	" << fano_exp_fit[0] << "	" << fano_exp_fit_error[0]  << "	" <<  events_exp_fit[0] << endl;
-
+	    
+	cout<<"Fano: "<<fano_exp_fit[0]<<endl;
+	cout<<"Error: "<<fano_exp_fit_error[0]<<endl;
+	cout<<"Eventos: "<<events_exp_fit[0]<<endl;
 
 	myfile.close();
 //return 0;

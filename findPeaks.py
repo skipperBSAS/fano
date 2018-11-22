@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 # from scipy.signal import find_peaks_cw
 import peakutils
 import sys
+import pickle
 import time
 inroot = sys.argv[1]
+
 
 
 # ===================================================
@@ -104,6 +106,8 @@ for i in range(1):
     pendiente = [0]*N
     delta =[0]*N
     promedio =[0]*N
+    eme=np.linspace(1,N,N)
+    eme = [int(i) for i in eme]
     dist_peaks =((),)
     caca = True
 
@@ -120,7 +124,8 @@ for i in range(1):
         peaks= peakutils.interpolate(np.linspace(range1,range2,bin_vector[m]), n, ind=indexes, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
 	plt.plot(np.linspace(range1,range2,bin_vector[m]),smooth(n,5))
    	plt.plot(peaks,n[indexes],'bo')
-	fig.savefig('Foo'+str(m)+'.pdf')
+	#fig.savefig('Foo'+str(m)+'.pdf')
+	pickle.dump(fig, file('myplot'+str(m)+'.pickle', 'w'))
         peaks = [double(i) for i in peaks]
         #print len(peaks)
         dist_peaks=np.diff(peaks)
@@ -139,32 +144,35 @@ for i in range(1):
         x = np.linspace(1,len(peaks),len(peaks))
         range= np.linspace(range1,range2,len(peaks))
         slope = np.polyfit(x,peaks,1)
-        x1=np.linspace(range1,range2)
-        y1=slope[0]*x+slope[1]
+#        x1=np.linspace(range1,range2)
+#        y1=slope[0]*x+slope[1]
         media=np.mean(dist_peaks)
         promedio[m]=media
         pendiente[m]=slope[0]
         delta[m]=abs(slope[0]-media)
         #print "slope = "+str(slope[0])
         #print "media = "+str(media)
-        if j==0:
-	    factor=slope[0]
-            factor2=np.mean(dist_peaks)
-	    delta2=delta[m]
-	    M=m
-
- 
-        else:
-            if delta[m]<delta2:
-                factor=slope[0]
-                factor2=np.mean(dist_peaks)
-		delta2=delta[m]
-	    	M=m
-	    	
+#        if j==0:
+#	    factor=slope[0]
+#            factor2=np.mean(dist_peaks)
+#	    delta2=delta[m]
+#	    M=m
+#
+# 
+#        else:
+#            if delta[m]<delta2:
+#                factor=slope[0]
+#                factor2=np.mean(dist_peaks)
+#		delta2=delta[m]
+	#    	M=m
+	#    	
 	m=m+1
 	plt.close()
 	j=j+1
-    print str(factor)+" delta = "+str(delta2)+" m = "+str(M)
+    a=np.column_stack((pendiente,promedio,delta,eme))
+    b=a[a[:,2].argsort()]
+    print b
+    #print str(factor)+" delta = "+str(delta2)+" m = "+str(M)
     plt.close()
     fig1=plt.figure()
     plt.hist(pendiente,bins=200)
