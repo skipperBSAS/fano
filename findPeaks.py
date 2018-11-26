@@ -75,7 +75,7 @@ for i in range(1):
 
     plt.figure(1)
 
-    range1=100000
+    range1=1000
     range2=550000
     bin=(range2-range1)/100
     n1,bins1,patches1 = plt.hist(pixValue,bins=bin,range=(range1,range2))
@@ -97,8 +97,8 @@ for i in range(1):
     peak1 = [double(i) for i in peak1]
     range1=peak1[0]-int(np.sqrt(peak1[0]))*10
     range2=peak1[0]+int(np.sqrt(peak1[0]))*10
-    BIN=int((range2-range1)/32) # enlarging the dividend, gives us thicker bins
-    N=151
+    BIN=int((range2-range1)/20) # enlarging the dividend, gives us thicker bins
+    N=251
     bin_vector=np.linspace(BIN-N/2,BIN+N/2, num=N)
     bin_vector = [int(i) for i in bin_vector]
     m=0
@@ -171,15 +171,21 @@ for i in range(1):
 	j=j+1
     a=np.column_stack((pendiente,promedio,delta,eme))
     b=a[a[:,2].argsort()]
-    print b
+    print b[1:20,:]
+    print peak1
     #print str(factor)+" delta = "+str(delta2)+" m = "+str(M)
     plt.close()
     fig1=plt.figure()
-    plt.hist(pendiente,bins=200)
+    plt.hist(pendiente,bins=50)
     fig1.show()
     fig2=plt.figure()
-    plt.hist(promedio,bins=200,color='red')
+    plt.hist(promedio,bins=50,color='red')
     fig2.show()
+    fig3=plt.figure()
+    plt.plot(eme,pendiente,'o')
+    plt.plot(eme,promedio,'o')
+    fig3.show()
+
 #    plt.plot(np.linspace(range1,range2,bin_vector[M]),smooth(n,5))
     # print n[indexes]
     #plt.plot(peaks,n[indexes],'bo')
