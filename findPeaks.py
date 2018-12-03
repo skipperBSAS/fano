@@ -95,11 +95,16 @@ for i in range(1):
 
 
     peak1 = [double(i) for i in peak1]
-    range1=peak1[0]-int(np.sqrt(peak1[0]))*10
-    range2=peak1[0]+int(np.sqrt(peak1[0]))*10
-    BIN=int((range2-range1)/20) # enlarging the dividend, gives us thicker bins
-    N=251
-    bin_vector=np.linspace(BIN-N/2,BIN+N/2, num=N)
+    #range1=peak1[0]-int(np.sqrt(peak1[0]))*20
+    #range2=peak1[0]+int(np.sqrt(peak1[0]))*20
+    range2=peak1[0]+230*20
+    range1=peak1[0]-230*20
+    num=int((range2-range1)/230) # aprox # of peaks
+    BIN=num*15 #aprox 20 binsper peak    
+    #BIN=int((range2-range1)/10) # enlarging the dividend, gives us thicker bins
+    N=101
+    #bin_vector=np.linspace(BIN-N/2,BIN+N/2, num=N)
+    bin_vector=np.linspace(400,2600, num=N)
     bin_vector = [int(i) for i in bin_vector]
     m=0
     j=0
@@ -121,13 +126,14 @@ for i in range(1):
         n,bins,patches = plt.hist(pixValue,bins=bin_vector[m],range=(range1,range2))
         indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 150*bin_vector[m]/(range2-range1))
 	
-        peaks= peakutils.interpolate(np.linspace(range1,range2,bin_vector[m]), n, ind=indexes, width=1) #uses a gaussian function and the precedent indexes to enhance our peak finding
+	peaks = peakutils.interpolate(np.linspace(range1,range2,bin_vector[m]), n, ind=indexes[1:len(indexes)-1], width=8) #uses a gaussian function and the precedent indexes to enhance our peak findi
+        #peaks = peakutils.interpolate(np.linspace(range1,range2,bin_vector[m]), n[1:len(n)-1], ind=indexes[1:len(indexes)-1], width=2) #uses a gaussian function and the precedent indexes to enhance our peak findi
 	plt.plot(np.linspace(range1,range2,bin_vector[m]),smooth(n,5))
-   	plt.plot(peaks,n[indexes],'bo')
+   	plt.plot(peaks,n[indexes[1:len(indexes)-1]],'bo')
 	#fig.savefig('Foo'+str(m)+'.pdf')
 	pickle.dump(fig, file('myplot'+str(m)+'.pickle', 'w'))
         peaks = [double(i) for i in peaks]
-        #print len(peaks)
+        #print peaks
         dist_peaks=np.diff(peaks)
         #print len(dist_peaks)
         #print np.mean(dist_peaks)
@@ -135,8 +141,9 @@ for i in range(1):
 
 
 	minimo=min(peaks)
-	if minimo<100:
+	if minimo<1000:
 		m=m+1
+		print "caca"
 		continue
 
 	print m
@@ -176,14 +183,14 @@ for i in range(1):
     #print str(factor)+" delta = "+str(delta2)+" m = "+str(M)
     plt.close()
     fig1=plt.figure()
-    plt.hist(pendiente,bins=50)
+    plt.hist(pendiente,bins=100,range=(225,235))
     fig1.show()
     fig2=plt.figure()
-    plt.hist(promedio,bins=50,color='red')
+    plt.hist(promedio,bins=100,range=(225,235),color='red')
     fig2.show()
     fig3=plt.figure()
-    plt.plot(eme,pendiente,'o')
-    plt.plot(eme,promedio,'o')
+    plt.plot(bin_vector,pendiente,'o')
+    plt.plot(bin_vector,promedio,'o')
     fig3.show()
 
 #    plt.plot(np.linspace(range1,range2,bin_vector[M]),smooth(n,5))
@@ -196,3 +203,9 @@ for i in range(1):
 
 #    plt.figure(4)
 #    plt.hist(dist_peaks)
+
+
+
+#fig1 = plt.figure()
+#fig1 = pickle.load(file('myplot.pickle'))
+#fig1.show()
