@@ -114,7 +114,6 @@ for i in range(1):
     eme=np.linspace(1,N,N)
     eme = [int(i) for i in eme]
     dist_peaks =((),)
-    caca = True
 
     #chi=np.linspace(BIN-N/2,BIN+N/2, num=N)
     for h in bin_vector:
@@ -124,7 +123,8 @@ for i in range(1):
 	fig=plt.figure(m+1,clear=True)
         fig=plt.figure(m+2)
         n,bins,patches = plt.hist(pixValue,bins=bin_vector[m],range=(range1,range2))
-        indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 150*bin_vector[m]/(range2-range1))
+        #indexes = peakutils.indexes(n, thres=0.02/max(smooth(n,20)), min_dist= 150*bin_vector[m]/(range2-range1))
+        indexes = peakutils.indexes(n, thres=0.2), min_dist= 150*bin_vector[m]/(range2-range1))
 	
 	peaks = peakutils.interpolate(np.linspace(range1,range2,bin_vector[m]), n, ind=indexes[1:len(indexes)-1], width=8) #uses a gaussian function and the precedent indexes to enhance our peak findi
         #peaks = peakutils.interpolate(np.linspace(range1,range2,bin_vector[m]), n[1:len(n)-1], ind=indexes[1:len(indexes)-1], width=2) #uses a gaussian function and the precedent indexes to enhance our peak findi
@@ -143,7 +143,6 @@ for i in range(1):
 	minimo=min(peaks)
 	if minimo<1000:
 		m=m+1
-		print "caca"
 		continue
 
 	print m

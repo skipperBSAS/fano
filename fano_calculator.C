@@ -27,6 +27,7 @@
 #include "TTree.h"
 #include "TObjString.h"
 #include "TH2D.h"
+#include <fstream>
 using namespace std;
 
 void Enable_and_Set_Branches(TTree* & tree);
@@ -49,7 +50,7 @@ void Enable_and_Set_Branches(TTree* & tree);
   //int xBary_min=0;int xBary_max=100;
   //int yBary_min=0;int yBary_max=100;
 
-  int nbins = 10;
+  int nbins = 6;
 
   const int maxClusterSize = 50000;
 
@@ -88,17 +89,15 @@ void fano_calculator(){
 
 cout<<"min ePix: "<< minePix<<endl;
 
-					ofstream myfile;
 
 
-
+					  std::ofstream myfile;
 					//myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55_ST136/fano.txt");
-					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/Con_LED/142K/fano.txt");
+					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/16Nov2018/LED55Fe_ST124K_02_a2-5/afterskipper2root/clustered_mask/fano_DC.txt", std::ios_base::app);
 
 
             //TFile * f_exp = TFile::Open("./55Fe_exp.root");
-            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/analisis/Con_LED/142K/output_2.root");
-            if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
+            TFile * f_exp = TFile::Open("/home/mariano/MEGAsync/images_from_mkids/16Nov2018/LED55Fe_ST124K_02_a2-5/afterskipper2root/clustered_mask/output_DC=5000.root");
             if (!f_exp->IsOpen()) {std::cerr << "ERROR: cannot open the root file with experimental data" << std::endl;}
             TTree * texp = (TTree*) f_exp->Get("hitSumm");
 
@@ -139,8 +138,17 @@ cout<<"min ePix: "<< minePix<<endl;
 					int i = 0;
 					for(int i_event=0;i_event<Entries_exp; i_event++){
 					texp->GetEntry(i_event);
-
-				//			if (ohdu == ohdu_numer) {
+      							bool Cota = true;
+      							for (int p = 0; p < nSavedPix; ++p){
+      								if(ePix[p]<1.5){
+									if (e>emin && e<emax){
+									e=e-1;
+      									Cota = true;
+      									//break;
+									}
+      								}
+      							}
+							if (Cota==true) {
 								if (e>emin && e<emax){  // number of electrons
                   if (n==ene){
     									h_exp_e[ene]->Fill(e);
@@ -149,7 +157,7 @@ cout<<"min ePix: "<< minePix<<endl;
 									    i++;
 									}
 								}
-					//		}
+							}
 						}
 
 
@@ -176,9 +184,9 @@ cout<<"min ePix: "<< minePix<<endl;
 
 					}
 						// save to file
-						myfile << "Mean" << "	" <<"Sigma" << "	" <<"Fano factor" << "	" <<"Fano error" << "	" <<", increasing n" <<endl;
+						myfile << "N" << "	" << "Mean" << "	" << "Mean Error" << "	" <<"Sigma" << "	" <<"Fano factor" << "	" <<"Fano error" << "	" <<" increasing n" <<endl;
 						for(int i = 1; i < nbins+1; i ++) {
-						myfile  << mean_exp_fit[i]  << "	" << sigma_exp_fit[i] << "	" << fano_exp_fit[i] << "	" << fano_exp_fit_error[i]  << "	" <<  events_exp_fit[i] << endl;
+						myfile << i << "	" << mean_exp_fit[i] << "	" << mean_exp_fit_error[i]  << "	" << sigma_exp_fit[i] << "	" << fano_exp_fit[i] << "	" << fano_exp_fit_error[i]  << "	" <<  events_exp_fit[i] << endl;
 						}
 
             h_exp_e_total->Fit("gaus");
