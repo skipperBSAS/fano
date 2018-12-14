@@ -93,7 +93,7 @@ cout<<"min ePix: "<< minePix<<endl;
 
 					  std::ofstream myfile;
 					//myfile.open ("/home/mariano/MEGAsync/images_from_mkids/analisis/fe55_ST136/fano.txt");
-					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/16Nov2018/LED55Fe_ST124K_02_a2-5/afterskipper2root/clustered_mask/fano_DC.txt", std::ios_base::app);
+					myfile.open ("/home/mariano/MEGAsync/images_from_mkids/16Nov2018/LED55Fe_ST124K_02_a2-5/afterskipper2root/clustered_mask/fano_DC_2.txt", std::ios_base::app);
 
 
             //TFile * f_exp = TFile::Open("./55Fe_exp.root");
@@ -140,12 +140,12 @@ cout<<"min ePix: "<< minePix<<endl;
 					texp->GetEntry(i_event);
       							bool Cota = true;
       							for (int p = 0; p < nSavedPix; ++p){
-      								if(ePix[p]<1.5){
+      								//if(ePix[p]<1.5){
 									if (e>emin && e<emax){
-									e=e-1;
+									e=e;
       									Cota = true;
       									//break;
-									}
+									//}
       								}
       							}
 							if (Cota==true) {
